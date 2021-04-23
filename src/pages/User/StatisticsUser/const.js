@@ -13,11 +13,14 @@ const genderPieChartTemplate = [
  * @param {Array} data 此处data是通过API获取到的user数组
  */
 export const genderSource = (data) => {
+  genderPieChartTemplate.forEach(item => {
+    item.count = 0
+  })
   const genderArr = data.map(item => item.sex)
   genderArr.forEach(item => {
-    if (item === '0') {
+    if (item === 0) {
       genderPieChartTemplate[0].count++
-    } else if (item === '1') {
+    } else if (item === 1) {
       genderPieChartTemplate[1].count++
     } else {
       genderPieChartTemplate[2].count++
@@ -28,10 +31,10 @@ export const genderSource = (data) => {
 
 
 const ageHistogramTemplate = [
-  {age: '小于15岁 <=15', count: 0},
+  {age: '小于15岁 <15', count: 0},
   {age: '15至30岁 15~30', count: 0},
   {age: '30至50岁 30~50', count: 0},
-  {age: '大于50岁 >=50', count: 0},
+  {age: '大于50岁 >50', count: 0},
 ]
 
 /**
@@ -39,13 +42,16 @@ const ageHistogramTemplate = [
  * @param {Array} data 此处data是通过API获取到的user数组
  */
 export const ageSource = (data) => {
-  const ageArr = data.map(item => Number(item.age))
+  ageHistogramTemplate.forEach(item => {
+    item.count = 0
+  })
+  const ageArr = data.map(item => item.age)
   ageArr.forEach(item => {
-    if (item <= 15) {
+    if (item < 15) {
       ageHistogramTemplate[0].count++
-    } else if (item > 15 && item < 30) {
+    } else if (item < 30) {
       ageHistogramTemplate[1].count++
-    } else if (item >= 30 && item < 50) {
+    } else if (item < 50) {
       ageHistogramTemplate[2].count++
     } else {
       ageHistogramTemplate[3].count++
@@ -70,23 +76,26 @@ const lastLoginTimeLineChartTemplate = [
  * @param {Array} data 此处data是通过API获取到的user数组
  */
 export const lastLoginTimeSource = (data) => {
+  lastLoginTimeLineChartTemplate.forEach(item => {
+    item.count = 0
+  })
   const lastLoginTimeArr = data.map(item => {
     return Number(formatDate(new Date(item.lastLoginTime), 'HH'))
   })
   lastLoginTimeArr.forEach(item => {
-    if (0 < item && item < 6) {
+    if (item < 6) {
       lastLoginTimeLineChartTemplate[0].count++
-    } else if (6 < item && item < 9) {
+    } else if (item < 9) {
       lastLoginTimeLineChartTemplate[1].count++
-    } else if (9 < item && item < 11) {
+    } else if (item < 11) {
       lastLoginTimeLineChartTemplate[2].count++
-    } else if (11 < item && item < 13) {
+    } else if (item < 13) {
       lastLoginTimeLineChartTemplate[3].count++
-    } else if (13 < item && item < 17) {
+    } else if (item < 17) {
       lastLoginTimeLineChartTemplate[4].count++
-    } else if (17 < item && item < 19) {
+    } else if (item < 19) {
       lastLoginTimeLineChartTemplate[5].count++
-    } else if (19 < item && item < 24) {
+    } else {
       lastLoginTimeLineChartTemplate[6].count++
     }
   })
@@ -103,6 +112,9 @@ const browserPieChartTemplate = [
 ]
 
 export const browserSource = (data) => {
+  browserPieChartTemplate.forEach(item => {
+    item.count = 0
+  })
   const borwserArr = data.map(item => item.loginSetting && item.loginSetting).filter(item => item).map(item => item.browser).filter(item => item)
   borwserArr.forEach(item => {
     if (item === 'Opera') {
