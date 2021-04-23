@@ -4,6 +4,7 @@ import {systemApi} from './../../../api'
 
 import {formatDate} from "../../../utils";
 
+const rowHeight = 90
 const columns = [
   {
     title: '反馈编号ID',
@@ -41,6 +42,8 @@ const columns = [
 
 export default function Feedback(props) {
   const [feedbackList, setFeedbackList] = useState([])
+  const [pagination, setPagination] = useState({})
+
 
   useEffect(() => {
     ;(async () => {
@@ -48,14 +51,25 @@ export default function Feedback(props) {
       console.log(data)
       if (data.code === 2000) {
         setFeedbackList(data.data.feedbackList)
+        //处理分页显示的参数
+        const layouContent = document.querySelector('.ant-layout-content')
+        const layouContentHeight = layouContent ? layouContent.offsetHeight : '600'
+        const pageSize = Math.round(layouContentHeight / rowHeight)
+        const tmp = {
+          pageSize,
+          total: data.data.feedbackList.length,
+          showTotal: total => `共 ${total} 条数据`
+        }
+        setPagination(tmp)
       }
     })()
   }, [])
 
   return (
       <div>
-        <p>当前管理员</p>
-        <Table rowKey={record => record.id} dataSource={feedbackList} columns={columns}/>
+        <p>反馈列表</p>
+        <Table pagination={pagination} rowKey={record => record.id} dataSource={feedbackList} columns={columns}
+               scroll={{x: 1000, y: 0}}/>
       </div>
   )
 }

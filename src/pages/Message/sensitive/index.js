@@ -4,6 +4,7 @@ import {systemApi} from './../../../api'
 
 import {formatDate} from "../../../utils";
 
+const rowHeight = 90
 const columns = [
   {
     title: '消息编号Id',
@@ -54,21 +55,34 @@ const columns = [
 
 export default function Sensitive(props) {
   const [sensitiveList, setSensitiveList] = useState([])
+  const [pagination, setPagination] = useState({})
+
 
   useEffect(() => {
     ;(async () => {
       const {data = {}} = await systemApi.getSensitiveMessageList()
-      console.log(data)
+      // console.log(data)
       if (data.code === 2000) {
         setSensitiveList(data.data.sensitiveMessageList)
+        //处理分页显示的参数
+        const layouContent = document.querySelector('.ant-layout-content')
+        const layouContentHeight = layouContent ? layouContent.offsetHeight : '600'
+        const pageSize = Math.round(layouContentHeight / rowHeight)
+        const tmp = {
+          pageSize,
+          total: data.data.sensitiveMessageList.length,
+          showTotal: total => `共 ${total} 条数据`
+        }
+        setPagination(tmp)
       }
     })()
   }, [])
 
   return (
       <div className="admin-manage-page">
-        <p>当前管理员</p>
-        <Table rowKey={record => record.id} dataSource={sensitiveList} columns={columns}/>
+        <p>敏感词消息列表</p>
+        <Table pagination={pagination} rowKey={record => record.id} dataSource={sensitiveList} columns={columns}
+               scroll={{x: 1000, y: 0}}/>
       </div>
   )
 }

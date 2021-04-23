@@ -1,4 +1,4 @@
-export function formatDate(time, type = 'YYYY-MM-DD') { //
+export function formatDate(time, type = 'YYYY-MM-DD') {
   const y = formatNumber(time.getFullYear())
   const m = formatNumber(time.getMonth() + 1)
   const d = formatNumber(time.getDate())
@@ -73,7 +73,7 @@ export function lastMonth(date) {
 
 // 格式化性别
 export function formatSex(val) {
-  return val === '0' ? '男👨' : val === '1' ? '女👩' : '未知'
+  return val === 0 ? '男👨' : val === 1 ? '女👩' : '未知'
 }
 
 
